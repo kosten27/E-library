@@ -13,3 +13,5 @@ insert into book values(8, 'Harry Potter and the Goblet of Fire', 2000, (select 
 insert into book values(9, 'Harry Potter and the Order of the Phoenix', 2003, (select id from author where id = 1));
 insert into book values(10, 'Harry Potter and the Half-Blood Prince', 2005, (select id from author where id = 1));
 insert into book values(11, 'Harry Potter and the Deathly Hallows', 2007, (select id from author where id = 1));
+
+insert into BOOK_AUTHORS values((select id from book where id = 20), (select id from author where id = 0));

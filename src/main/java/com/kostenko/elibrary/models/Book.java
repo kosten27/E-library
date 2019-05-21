@@ -1,6 +1,7 @@
 package com.kostenko.elibrary.models;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "BOOK")
 public class Book {
@@ -8,16 +9,16 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
-    @ManyToOne
-    private Author author;
+    @ManyToMany
+    private Set<Author> authors;
     private int year;
 
     public Book() {
     }
 
-    public Book(String title, Author author, int year) {
+    public Book(String title, Set<Author> authors, int year) {
         this.title = title;
-        this.author = author;
+        this.authors = authors;
         this.year = year;
     }
 
@@ -25,8 +26,8 @@ public class Book {
         return id;
     }
 
-    public Author getAuthor() {
-        return author;
+    public Set<Author> getAuthor() {
+        return authors;
     }
 
     public String getTitle() {
@@ -45,8 +46,8 @@ public class Book {
         this.title = title;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthor(Set<Author> authors) {
+        this.authors = authors;
     }
 
     public void setYear(int year) {

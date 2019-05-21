@@ -1,10 +1,8 @@
 package com.kostenko.elibrary.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 public class Author {
@@ -13,6 +11,8 @@ public class Author {
     private Long id;
     @NotBlank(message = "Name is mandatory")
     private String name;
+    @ManyToMany(mappedBy = "authors")
+    private Set<Book> books;
 
     public Author() {
     }

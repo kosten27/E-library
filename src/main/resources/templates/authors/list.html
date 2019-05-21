@@ -5,13 +5,15 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Authors</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/shards.min.css">
 </head>
 <body>
 <div th:switch="${authors}" class="container my-5">
-    <div class="row">
+    <div class="row justify-content-center font-weight-medium">
         <div class="col-md-6">
             <h2 th:case="null">No authors yet!</h2>
             <div th:case="*">
@@ -20,15 +22,20 @@
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th style="width: 5%">Edit</th>
-                        <th style="width: 5%">Delete</th>
+                        <!--<th style="width: 5%">Edit</th>
+                        <th style="width: 5%">Delete</th>-->
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="author : ${authors}">
-                        <td th:text="${author.name}"></td>
-                        <td style="text-align: center"><a th:href="@{'/authors/update/{id}'(id=${author.id})}"><i class="fa fa-edit" style="font-size:20px"></i></a></td>
-                        <td style="text-align: center"><a th:href="@{'/authors/delete/{id}'(id=${author.id})}"><i class="fa fa-trash" style="font-size:20px"></i></a></td>
+                        <td>
+                            <a th:href="@{/authors/__${author.id}__}" th:text="${author.name}"/></a>
+                        </td>
+                        <!--<td th:text="${author.name}"></td>
+                        <td style="text-align: center"><a th:href="@{'/authors/update/{id}'(id=${author.id})}"><i
+                                class="fa fa-edit" style="font-size:20px"></i></a></td>
+                        <td style="text-align: center"><a th:href="@{'/authors/delete/{id}'(id=${author.id})}"><i
+                                class="fa fa-trash" style="font-size:20px"></i></a></td>-->
                     </tr>
                     </tbody>
                 </table>
@@ -36,6 +43,38 @@
             <p class="my-5"><a href="/authors/add" class="btn btn-primary" value="Add author">Add author</a></p>
         </div>
     </div>
+
+    <nav aria-label="Pagination" th:if="${authors.totalPages gt 0}">
+        <ul class="pagination justify-content-center font-weight-medium">
+            <li class="page-item" th:classappend="${authors.number eq 0} ? 'disabled'">
+                <a class="page-link svg-icon"
+                   th:href="@{/authors?page={id}(id=${authors.number lt 2 ? 1 : authors.number})}"
+                   aria-label="Previous"
+                   title="Previous Page" rel="tooltip">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${i eq authors.number + 1} ? 'active'"
+                th:each="i : ${#numbers.sequence( authors.number + 1, authors.totalPages > 10 + authors.number ? authors.number + 10 : authors.totalPages, 1)}">
+                <a class="page-link" th:href="@{/authors?page={id}(id=${i})}" th:text="${i}"
+                   th:title="${'Page '+ i}"
+                   rel="tooltip"></a>
+            </li>
+            <li class="page-item disabled" th:if="${authors.number + 10 < authors.totalPages}">
+                <a class="page-link svg-icon" href="#">
+                    <span data-feather="more-horizontal" width="20" height="20"></span>
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${authors.number + 1 eq authors.totalPages} ? 'disabled'">
+                <a class="page-link svg-icon" th:href="@{/authors?page={id}(id=${authors.number + 2})}"
+                   aria-label="Next"
+                   title="Next Page" rel="tooltip">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
+
 </body>
 </html>
