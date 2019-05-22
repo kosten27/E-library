@@ -8,9 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -33,10 +37,41 @@ public class BookController {
         return "books/list";
     }
 
-    @GetMapping("books/delete/{id}")
-    public String deleteBook() {
-
-        return "";
+    @GetMapping("/books/add")
+    public String showAddBook(Book book, Model model) {
+        model.addAttribute("authors", authorService.findAll());
+        return "books/add";
     }
 
+    @PostMapping("/books/add")
+    public String addBook(@Valid Book book, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "books/add";
+        }
+        bookService.save(book);
+        return "redirect:/books";
+    }
+
+    @GetMapping("/books/{id}/edit")
+    public String showUpdateBook(@PathVariable("id") long id, Model model) {
+        Book book = bookService.findById(id);
+        model.addAttribute("book", book);
+        model.addAttribute("authors", authorService.findAll());
+        return "books/update";
+    }
+
+    @PostMapping("/books/{id}/edit")
+    public String updateBook(@PathVariable("id") long id, @Valid Book book, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "books/update";
+        }
+        bookService.save(book);
+        return "redirect:/books";
+    }
+
+    @GetMapping("books/{id}/delete")
+    public String deleteBook(@PathVariable("id") long id) {
+        bookService.deleteById(id);
+        return "redirect:/books";
+    }
 }

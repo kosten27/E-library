@@ -10,7 +10,7 @@ insert into book values(5, 'Harry Potter and the Philosopher''s Stone', 1997, (s
 insert into book values(6, 'Harry Potter and the Chamber of Secrets', 1998, (select id from author where id = 1));
 insert into book values(7, 'Harry Potter and the Prisoner of Azkaban', 1999, (select id from author where id = 1));
 insert into book values(8, 'Harry Potter and the Goblet of Fire', 2000, (select id from author where id = 1));
-insert into book values(9, 'Harry Potter and the Order of the Phoenix', 2003, (select id from author where id = 1));
+insert into book values(9, 'Harry Potter and the BookOrder of the Phoenix', 2003, (select id from author where id = 1));
 insert into book values(10, 'Harry Potter and the Half-Blood Prince', 2005, (select id from author where id = 1));
 insert into book values(11, 'Harry Potter and the Deathly Hallows', 2007, (select id from author where id = 1));
 

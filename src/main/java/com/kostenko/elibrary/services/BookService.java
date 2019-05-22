@@ -23,11 +23,15 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Book findBook(Long id) {
+    public Book findById(Long id) {
         return bookRepository.findById(id).orElse(null);
     }
 
     public List<Book> findAll() {
         return bookRepository.findAll();
+    }
+
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
     }
 }
