@@ -11,8 +11,7 @@ import java.util.Set;
 public class BookOrder {
     @Id
     @GeneratedValue
-    private long id;
-//    @Temporal(TemporalType.DATE)
+    private Long id;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date date;
     @Enumerated(EnumType.ORDINAL)
