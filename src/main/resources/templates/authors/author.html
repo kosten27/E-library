@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Add User</title>
+    <title>Author</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -14,23 +14,46 @@
 <body>
 <div th:insert="fragments/header :: header"></div>
 <div class="container my-5">
-    <h2 class="mb-5">New author</h2>
+    <h2 class="mb-5">Author</h2>
     <div class="row">
         <div class="col-md-6">
-            <form action="#" th:action="@{/authors/add}" th:object="${author}" method="post">
+            <form action="#" th:action="@{/authors/save}" th:object="${author}" method="post">
                 <div class="row">
                     <div class="form-group col-md-6">
+                        <input type="hidden" th:field="*{id}">
+
                         <label for="name" class="col-form-label">Name</label>
                         <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Name">
                         <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mt-5">
-                        <input type="submit" class="btn btn-primary" value="Add author">
+                    <div class="col-md-6 mt-3">
+                        <input type="submit" class="btn btn-primary" value="Save author">
                     </div>
                 </div>
             </form>
+            <div th:if="${author.id != null}">
+                <div th:switch="${author.books}">
+                    <div class="row">
+                        <div class="col-md-6 mt-4">
+                            <h4>Books</h4>
+                            <table class="table table-striped table-responsive-md">
+                                <thead>
+                                <tr>
+                                    <th>Title</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="book : ${author.books}">
+                                    <td th:text="${book.title}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

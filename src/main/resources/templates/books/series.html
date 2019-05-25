@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Series</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/shards.min.css">
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="container my-5">
+    <h2 class="mb-3">Series</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="#" th:action="@{/books/{id}/series/save(id=${bookId})}" th:object="${series}" method="post">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <input type="hidden" th:field="*{id}" class="form-control" id="id">
+                        <input type="hidden" th:field="*{book}" class="form-control" id="book">
+
+                        <label for="title" class="col-form-label">Name</label>
+                        <input type="text" th:field="*{name}" class="form-control" id="title" placeholder="Title">
+                        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
+
+                        <!--<label for="inStock" class="col-form-label">In stock</label>-->
+                        <!--<input type="checkbox" name="inStock" class="form-check-input" id="inStock" th:checked="*{inStock}" />-->
+                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<div class="form-check">-->
+                            <!--<input class="form-check-input" type="checkbox" id="gridCheck">-->
+                            <!--<label class="form-check-label" for="gridCheck">-->
+                                <!--Check me out-->
+                            <!--</label>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="inStock" th:field="${series.inStock}">
+                    <label class="custom-control-label" for="inStock">In stock</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mt-3">
+                        <input type="submit" class="btn btn-primary" value="Save series">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

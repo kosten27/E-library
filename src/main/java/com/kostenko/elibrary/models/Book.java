@@ -1,25 +1,22 @@
 package com.kostenko.elibrary.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "BOOK")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String title;
     @ManyToOne
     private Author author;
-//    private int year;
+    @OneToMany(mappedBy = "book")
+    private List<Series> series;
 
     public Book() {
-    }
-
-    public Book(String title, Set<Author> authors) {
-        this.title = title;
-        this.author = author;
-//        this.year = year;
     }
 
     public Long getId() {
@@ -34,10 +31,6 @@ public class Book {
         return title;
     }
 
-//    public int getYear() {
-//        return year;
-//    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -50,9 +43,13 @@ public class Book {
         this.author = author;
     }
 
-//    public void setYear(int year) {
-//        this.year = year;
-//    }
+    public List<Series> getSeries() {
+        return series;
+    }
+
+    public void setSeries(List<Series> series) {
+        this.series = series;
+    }
 
     @Override
     public String toString() {

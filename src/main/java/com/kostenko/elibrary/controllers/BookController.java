@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class BookController {
@@ -40,34 +40,35 @@ public class BookController {
     @GetMapping("/books/add")
     public String showAddBook(Book book, Model model) {
         model.addAttribute("authors", authorService.findAll());
-        return "books/add";
+        return "books/book";
     }
 
-    @PostMapping("/books/add")
+    @PostMapping("/books/save")
     public String addBook(@Valid Book book, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "books/add";
+            return "books/book";
         }
         bookService.save(book);
-        return "redirect:/books";
+        return "redirect:/books/" + book.getId();
     }
 
-    @GetMapping("/books/{id}/edit")
-    public String showUpdateBook(@PathVariable("id") long id, Model model) {
+    @GetMapping("/books/{id}")
+    public String showUpdateBook(@PathVariable("id") Long id, Model model) {
         Book book = bookService.findById(id);
         model.addAttribute("book", book);
         model.addAttribute("authors", authorService.findAll());
-        return "books/update";
+//        model.addAttribute("series", book.getSeries());
+        return "books/book";
     }
 
-    @PostMapping("/books/{id}/edit")
-    public String updateBook(@PathVariable("id") long id, @Valid Book book, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "books/update";
-        }
-        bookService.save(book);
-        return "redirect:/books";
-    }
+//    @PostMapping("/books/{id}/edit")
+//    public String updateBook(@PathVariable("id") long id, @Valid Book book, BindingResult result, Model model) {
+//        if (result.hasErrors()) {
+//            return "books/update";
+//        }
+//        bookService.save(book);
+//        return "redirect:/books";
+//    }
 
     @GetMapping("books/{id}/delete")
     public String deleteBook(@PathVariable("id") long id) {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Books</title>
+    <title>Readers</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -28,7 +28,7 @@
                     <tbody>
                     <tr th:each="reader : ${readers}">
                         <td>
-                            <a th:href="@{/readers/__${reader.id}__/edit}" th:text="${reader.Name}"/></a>
+                            <a th:href="@{/readers/__${reader.id}__}" th:text="${reader.Name}"/></a>
                         </td>
                     </tr>
                     </tbody>

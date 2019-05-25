@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Add User</title>
+    <title>Book</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -14,12 +14,14 @@
 <body>
 <div th:insert="fragments/header :: header"></div>
 <div class="container my-5">
-    <h2 class="mb-5">New book</h2>
+    <h2 class="mb-3">Book</h2>
     <div class="row">
         <div class="col-md-6">
-            <form action="#" th:action="@{/books/add}" th:object="${book}" method="post">
+            <form action="#" th:action="@{/books/save}" th:object="${book}" method="post">
                 <div class="row">
                     <div class="form-group col-md-6">
+                        <input type="hidden" th:field="*{id}">
+
                         <label for="title" class="col-form-label">Title</label>
                         <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title">
                         <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></span>
@@ -30,14 +32,41 @@
                             <option th:each="author : ${authors}" th:value="${author.id}"
                                     th:text="${author.name}"></option>
                         </select>
+
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mt-5">
-                        <input type="submit" class="btn btn-primary" value="Add book">
+                    <div class="col-md-6 mt-2">
+                        <input type="submit" class="btn btn-primary" value="Save book">
                     </div>
                 </div>
             </form>
+            <div th:if="${book.id != null}">
+                <div class="row">
+                    <div class="col-md-6 mt-5">
+                        <h4>Series</h4>
+                        <table class="table table-striped table-responsive-md">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>In stock</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="series : ${book.series}">
+                                <td>
+                                    <a th:href="@{/books/__${book.id}__/series/__${series.id}__}"
+                                       th:text="${series.name}"></a>
+                                </td>
+                                <td th:text="${series.inStock}?'yes':'no'"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p class="my-3"><a th:href="@{/books/{id}/series/add(id=${book.id})}" class="btn btn-primary">Add
+                            series</a></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

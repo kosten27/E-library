@@ -3,9 +3,8 @@ package com.kostenko.elibrary.models;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class BookOrder {
@@ -18,17 +17,17 @@ public class BookOrder {
     private OrderStatus orderStatus;
     @ManyToOne
     private Reader reader;
-    @ManyToMany
-    private Set<Book> books;
+    @OneToMany(mappedBy = "bookOrder")
+    private List<BookOrderLine> bookOrderLines;
 
     public BookOrder() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -56,11 +55,11 @@ public class BookOrder {
         this.reader = reader;
     }
 
-    public Set<Book> getBooks() {
-        return books;
+    public List<BookOrderLine> getBookOrderLines() {
+        return bookOrderLines;
     }
 
-    public void setBooks(Set<Book> books) {
-        this.books = books;
+    public void setBookOrderLines(List<BookOrderLine> booksOrderLines) {
+        this.bookOrderLines = booksOrderLines;
     }
 }

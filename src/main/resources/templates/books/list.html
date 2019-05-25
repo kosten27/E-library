@@ -32,7 +32,7 @@
                     <tbody>
                     <tr th:each="book : ${books}">
                         <td>
-                            <a th:href="@{/books/__${book.id}__/edit}" th:text="${book.title}"/></a>
+                            <a th:href="@{/books/__${book.id}__}" th:text="${book.title}"/></a>
                         </td>
                         <!--<td th:text="${book.year}"></td>-->
                         <td th:text="${book.author}"></td>

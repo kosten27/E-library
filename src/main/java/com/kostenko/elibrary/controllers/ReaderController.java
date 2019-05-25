@@ -39,36 +39,21 @@ public class ReaderController {
     @GetMapping("/readers/add")
     public String showAddReader(Reader reader, Model model) {
         model.addAttribute("readers", readerService.findAll());
-        return "readers/add";
+        return "readers/reader";
     }
 
-    @PostMapping("/readers/add")
+    @PostMapping("/readers/save")
     public String addReader(@Valid Reader reader, BindingResult result) {
         if (result.hasErrors()) {
             return "readers/add";
         }
         readerService.save(reader);
-        return "redirect:/readers";
+        return "redirect:/readers/" + reader.getId();
     }
 
-    @GetMapping("/readers/{id}/edit")
+    @GetMapping("/readers/{id}")
     public String showUpdateReader(@PathVariable("id") long id, Model model) {
         model.addAttribute("reader", readerService.findById(id));
-        return "readers/update";
-    }
-
-    @PostMapping("/readers/{id}/edit")
-    public String updateBook(@PathVariable("id") long id, @Valid Reader reader, BindingResult result) {
-        if (result.hasErrors()) {
-            return "readers/update";
-        }
-        readerService.save(reader);
-        return "redirect:/readers";
-    }
-
-    @GetMapping("readers/{id}/delete")
-    public String deleteBook(@PathVariable("id") long id) {
-        readerService.deleteById(id);
-        return "redirect:/readers";
+        return "readers/reader";
     }
 }

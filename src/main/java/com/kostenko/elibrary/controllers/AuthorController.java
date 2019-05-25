@@ -37,29 +37,13 @@ public class AuthorController {
 
     @GetMapping("/authors/add")
     public String showAddAuthor(Author author) {
-        return "authors/add";
+        return "authors/author";
     }
 
-    @PostMapping("/authors/add")
+    @PostMapping("/authors/save")
     public String addAuthor(@Valid Author author, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "authors/add";
-        }
-        authorService.saveAuthor(author);
-        return "redirect:/authors";
-    }
-
-    @GetMapping("/authors/{id}/edit")
-    public String showUpdateAuthor(@PathVariable("id") long id, Model model) {
-        Author author = authorService.find(id);
-        model.addAttribute("author", author);
-        return "authors/update";
-    }
-
-    @PostMapping("/authors/{id}/edit")
-    public String updateAuthor(@PathVariable("id") long id, @Valid Author author, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return "authors/update";
+            return "authors/author";
         }
         authorService.saveAuthor(author);
         return "redirect:/authors/" + author.getId();
@@ -69,28 +53,6 @@ public class AuthorController {
     public String showAuthorDetails(@PathVariable("id") long id, Model model) {
         Author author = authorService.find(id);
         model.addAttribute("author", author);
-        return "authors/authorDetails";
-    }
-
-    @GetMapping("/authors/delete/{id}")
-    public String deleteAuthor(@PathVariable("id") long id) {
-        Author author = authorService.find(id);
-        authorService.delete(author);
-        return "redirect:/authors";
-    }
-
-    @GetMapping("/authors/{id}/books/add")
-    public String addBook(@PathVariable("id") long id, Model model) {
-        Author author = authorService.find(id);
-        model.addAttribute("author", author);
-        model.addAttribute("books", bookService.findAll());
-        return "authors/addBook";
-    }
-
-    @PostMapping("/authors/{id}/books/add")
-    public String addBook(@PathVariable("id") long id, Model model, @ModelAttribute Book book) {
-        Author author = authorService.find(id);
-        model.addAttribute("books", bookService.findAll());
-        return "authors/addBook";
+        return "authors/author";
     }
 }

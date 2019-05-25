@@ -1,9 +1,8 @@
 package com.kostenko.elibrary.controllers;
 
-import com.kostenko.elibrary.models.Author;
 import com.kostenko.elibrary.models.BookOrder;
-import com.kostenko.elibrary.services.BookOrderService;
-import com.kostenko.elibrary.services.ReaderService;
+import com.kostenko.elibrary.models.BookOrderLine;
+import com.kostenko.elibrary.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -26,6 +24,12 @@ public class BookOrderController {
     private BookOrderService bookOrderService;
     @Autowired
     private ReaderService readerService;
+    @Autowired
+    private BookService bookService;
+    @Autowired
+    private SeriesService seriesService;
+    @Autowired
+    private BookOrderLineService bookOrderLineService;
 
     @GetMapping("/orders")
     public String getBooks(Model model,
@@ -42,29 +46,28 @@ public class BookOrderController {
     @GetMapping("/orders/add")
     public String showAddBook(BookOrder bookOrder, Model model) {
         model.addAttribute("readers", readerService.findAll());
-        return "orders/add";
+        return "orders/order";
     }
 
-    @PostMapping("/orders/add")
+    @PostMapping("/orders/save")
     public String addBook(@Valid BookOrder bookOrder, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "orders/add";
         }
-        bookOrder.setDate(new Date());
         bookOrderService.save(bookOrder);
-        return "redirect:/orders";
+        return "redirect:/orders/" + bookOrder.getId();
     }
 
     @GetMapping("/orders/{id}")
-    public String showAuthorDetails(@PathVariable("id") long id, Model model) {
+    public String showAuthorDetails(@PathVariable("id") Long id, Model model) {
         BookOrder bookOrder = bookOrderService.findById(id);
         model.addAttribute("bookOrder", bookOrder);
-        return "orders/orderDetails";
+        model.addAttribute("readers", readerService.findAll());
+        return "orders/order";
     }
 
-
     @GetMapping("/orders/{id}/edit")
-    public String showUpdateAuthor(@PathVariable("id") long id, Model model) {
+    public String showUpdateAuthor(@PathVariable("id") Long id, Model model) {
         BookOrder bookOrder = bookOrderService.findById(id);
         model.addAttribute("bookOrder", bookOrder);
         model.addAttribute("readers", readerService.findAll());
@@ -72,7 +75,7 @@ public class BookOrderController {
     }
 
     @PostMapping("/orders/{id}/edit")
-    public String updateAuthor(@PathVariable("id") long id, @Valid BookOrder bookOrder, BindingResult result, Model model) {
+    public String updateAuthor(@PathVariable("id") Long id, @Valid BookOrder bookOrder, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("bookOrder", bookOrder);
             model.addAttribute("readers", readerService.findAll());
@@ -82,4 +85,27 @@ public class BookOrderController {
         return "redirect:/orders/" + bookOrder.getId();
     }
 
+    @GetMapping("/orders/{orderId}/lines/add")
+    public String addLine(@PathVariable("orderId") Long orderId, BookOrderLine bookOrderLine, Model model) {
+        model.addAttribute("books", bookService.findAll());
+        model.addAttribute("listSeries", seriesService.findAll());
+        return "orders/line";
+    }
+
+    @PostMapping("/orders/{orderId}/lines/save")
+    public String addLine(@PathVariable("orderId") Long orderId, BookOrderLine bookOrderLine) {
+        BookOrder bookOrder = bookOrderService.findById(orderId);
+        bookOrderLine.setBookOrder(bookOrder);
+        bookOrderLineService.save(bookOrderLine);
+        return "redirect:/orders/" + orderId;
+    }
+
+    @GetMapping("/orders/{orderId}/lines/{lineId}")
+    public String showLine(@PathVariable("orderId") Long orderId, @PathVariable("lineId") Long lineId, Model model) {
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("bookOrderLine", bookOrderLineService.findById(lineId));
+        model.addAttribute("books", bookService.findAll());
+        model.addAttribute("listSeries", seriesService.findAll());
+        return "orders/line";
+    }
 }
