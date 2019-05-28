@@ -28,11 +28,18 @@ public class BookController {
     @GetMapping("/books")
     public String getBooks(Model model,
                            @RequestParam("page") Optional<Integer> page,
-                           @RequestParam("size") Optional<Integer> size) {
+                           @RequestParam("size") Optional<Integer> size,
+                           @RequestParam("search") Optional<String> search) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(5);
-
-        Page<Book> books = bookService.findPagination(PageRequest.of(currentPage - 1, pageSize));
+        String stringSearch = search.orElse("");
+        Page<Book> books;
+        PageRequest pageable = PageRequest.of(currentPage - 1, pageSize);
+        if (stringSearch.equals("")) {
+            books = bookService.findAll(pageable);
+        } else {
+            books = bookService.findByTitleIsContaining(stringSearch, pageable);
+        }
         model.addAttribute("books", books);
         return "books/list";
     }
@@ -60,15 +67,6 @@ public class BookController {
 //        model.addAttribute("series", book.getSeries());
         return "books/book";
     }
-
-//    @PostMapping("/books/{id}/edit")
-//    public String updateBook(@PathVariable("id") long id, @Valid Book book, BindingResult result, Model model) {
-//        if (result.hasErrors()) {
-//            return "books/update";
-//        }
-//        bookService.save(book);
-//        return "redirect:/books";
-//    }
 
     @GetMapping("books/{id}/delete")
     public String deleteBook(@PathVariable("id") long id) {

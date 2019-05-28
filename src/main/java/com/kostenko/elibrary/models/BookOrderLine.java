@@ -1,6 +1,7 @@
 package com.kostenko.elibrary.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class BookOrderLine {
@@ -13,6 +14,7 @@ public class BookOrderLine {
     @OneToOne
     private Book book;
     @OneToOne
+    @NotNull(message = "Series is mandatory")
     private Series series;
 
     public BookOrderLine() {

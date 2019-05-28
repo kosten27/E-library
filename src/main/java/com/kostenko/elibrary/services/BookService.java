@@ -15,8 +15,12 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public Page<Book> findPagination(Pageable pageable) {
+    public Page<Book> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable);
+    }
+
+    public Page<Book> findByTitleIsContaining(String search, Pageable pageable) {
+        return bookRepository.findByTitleContainingIgnoreCase(search, pageable);
     }
 
     public Book save(Book book) {

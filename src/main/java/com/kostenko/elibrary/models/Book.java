@@ -1,9 +1,7 @@
 package com.kostenko.elibrary.models;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @Entity(name = "BOOK")
 public class Book {

@@ -22,9 +22,11 @@
                     <div class="form-group col-md-6">
                         <input type="hidden" th:field="*{id}">
 
-                        <label class="col-form-label">Date</label>
-                        <p th:text="${#dates.format(bookOrder.date, 'dd-MM-yyyy HH:mm')}" class="form-control"
-                           style="margin-bottom: 0px;"></p>
+                        <div th:if="${bookOrder.id != null}">
+                            <label class="col-form-label">Date</label>
+                            <p th:text="${#dates.format(bookOrder.date, 'dd.MM.yyyy HH:mm')}" class="form-control"
+                               style="margin-bottom: 0px;"></p>
+                        </div>
 
                         <label for="orderStatus" class="col-form-label">Status</label>
                         <select class="form-control" th:field="${bookOrder.orderStatus}" id="orderStatus"
@@ -35,8 +37,11 @@
                             </option>
                         </select>
 
+                        <label class="col-form-label">Deadline</label>
+                        <input type="date" th:field="${bookOrder.deadline}" class="form-control">
+
                         <label for="reader" class="col-form-label">Reader</label>
-                        <select class="form-control" th:field="${bookOrder.Reader}" id="reader" placeholder="Reader">
+                        <select class="form-control" th:field="${bookOrder.reader}" id="reader" placeholder="Reader">
                             <option value="0"></option>
                             <option th:each="reader : ${readers}" th:value="${reader.id}"
                                     th:text="${reader.name}"></option>
@@ -63,7 +68,7 @@
                             <tr th:each="bookOrderLine : ${bookOrder.bookOrderLines}">
                                 <td>
                                     <a th:href="@{/orders/__${bookOrder.id}__/lines/__${bookOrderLine.id}__}"
-                                       th:text="${bookOrderLine.toString()}"></a>
+                                       th:text="${bookOrderLine.series}"></a>
                                 </td>
                             </tr>
                             </tbody>

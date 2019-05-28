@@ -1,5 +1,5 @@
 package com.kostenko.elibrary.models;
 
 public enum OrderStatus {
-    NEW, ISSUED, RETURNED;
+    RESERVED, COMPLETED, RETURNED, CANCELED;
 }

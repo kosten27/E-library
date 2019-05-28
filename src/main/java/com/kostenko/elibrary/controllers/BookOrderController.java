@@ -87,15 +87,21 @@ public class BookOrderController {
 
     @GetMapping("/orders/{orderId}/lines/add")
     public String addLine(@PathVariable("orderId") Long orderId, BookOrderLine bookOrderLine, Model model) {
-        model.addAttribute("books", bookService.findAll());
-        model.addAttribute("listSeries", seriesService.findAll());
+//        model.addAttribute("books", bookService.findAll());
+        model.addAttribute("listSeries", seriesService.findAllAvailable());
         return "orders/line";
     }
 
     @PostMapping("/orders/{orderId}/lines/save")
-    public String addLine(@PathVariable("orderId") Long orderId, BookOrderLine bookOrderLine) {
+    public String addLine(@PathVariable("orderId") Long orderId, @Valid BookOrderLine bookOrderLine,
+                          BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("listSeries", seriesService.findAllAvailable());
+            return "orders/line";
+        }
         BookOrder bookOrder = bookOrderService.findById(orderId);
         bookOrderLine.setBookOrder(bookOrder);
+        bookOrderLine.setBook(bookOrderLine.getSeries().getBook());
         bookOrderLineService.save(bookOrderLine);
         return "redirect:/orders/" + orderId;
     }

@@ -13,6 +13,8 @@ public class BookOrder {
     private Long id;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date date;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date deadline;
     @Enumerated(EnumType.ORDINAL)
     private OrderStatus orderStatus;
     @ManyToOne
@@ -61,5 +63,13 @@ public class BookOrder {
 
     public void setBookOrderLines(List<BookOrderLine> booksOrderLines) {
         this.bookOrderLines = booksOrderLines;
+    }
+
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
     }
 }

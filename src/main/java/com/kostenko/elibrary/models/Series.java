@@ -49,6 +49,6 @@ public class Series {
 
     @Override
     public String toString() {
-        return name;
+        return String.format("%s (%s)", book, name);
     }
 }

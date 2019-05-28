@@ -22,6 +22,10 @@ public class SeriesService {
         return seriesRepository.findById(id).orElse(null);
     }
 
+    public List<Series> findAllAvailable() {
+        return  seriesRepository.findAllAvailable();
+    }
+
     public List<Series> findAll() {
         return seriesRepository.findAll();
     }
