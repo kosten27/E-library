@@ -3,6 +3,7 @@ package com.kostenko.elibrary.controllers;
 import com.kostenko.elibrary.exceptions.ValidationException;
 import com.kostenko.elibrary.models.BookOrder;
 import com.kostenko.elibrary.models.BookOrderLine;
+import com.kostenko.elibrary.models.OrderStatus;
 import com.kostenko.elibrary.models.Series;
 import com.kostenko.elibrary.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +55,8 @@ public class BookOrderController {
         PageRequest pageable = PageRequest.of(currentPage - 1, pageSize);
         Page<BookOrder> orders = null;
         if (deadline != null) {
-            orders = bookOrderService.findByDeadlineIsLessThanEqual(deadline, pageable);
+            orders = bookOrderService.findAllByDeadlineLessThanEqualAndOrderStatusEquals(deadline,
+                    pageable, OrderStatus.COMPLETED);
         } else {
             orders = bookOrderService.findPagination(pageable);
         }

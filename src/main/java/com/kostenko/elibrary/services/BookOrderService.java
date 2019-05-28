@@ -2,6 +2,7 @@ package com.kostenko.elibrary.services;
 
 import com.kostenko.elibrary.exceptions.ValidationException;
 import com.kostenko.elibrary.models.BookOrder;
+import com.kostenko.elibrary.models.OrderStatus;
 import com.kostenko.elibrary.models.Series;
 import com.kostenko.elibrary.repositories.BookOrderRepository;
 import com.kostenko.elibrary.validators.BookOrderValidator;
@@ -34,8 +35,11 @@ public class BookOrderService {
         return bookOrderRepository.findBookOrderBySeries(series);
     }
 
-    public Page<BookOrder> findByDeadlineIsLessThanEqual(Date deadline, Pageable pageable) {
-        return bookOrderRepository.findAllByDeadlineLessThanEqual(deadline, pageable);
+    public Page<BookOrder> findAllByDeadlineLessThanEqualAndOrderStatusEquals(Date deadline,
+                                                                              Pageable pageable,
+                                                                              OrderStatus orderStatus) {
+        return bookOrderRepository.findAllByDeadlineLessThanEqualAndOrderStatusEquals(deadline,
+                pageable, orderStatus);
     }
 
     public BookOrder save(BookOrder bookOrder) throws ValidationException {
@@ -43,6 +47,9 @@ public class BookOrderService {
             bookOrder.setDate(new Date());
         }
         bookOrderValidator.validateAvailableSeries(bookOrder);
+        if (bookOrder.getOrderStatus() == OrderStatus.RESERVED || bookOrder.getOrderStatus() == OrderStatus.COMPLETED) {
+            bookOrderValidator.checkUnreturnedOrders(bookOrder);
+        }
         return bookOrderRepository.save(bookOrder);
     }
 

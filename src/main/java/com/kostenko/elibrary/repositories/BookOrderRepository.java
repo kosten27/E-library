@@ -1,6 +1,8 @@
 package com.kostenko.elibrary.repositories;
 
 import com.kostenko.elibrary.models.BookOrder;
+import com.kostenko.elibrary.models.OrderStatus;
+import com.kostenko.elibrary.models.Reader;
 import com.kostenko.elibrary.models.Series;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +21,11 @@ public interface BookOrderRepository extends JpaRepository<BookOrder, Long> {
             "WHERE bol.series = :series ORDER BY bol.bookOrder.id DESC")
     public List<BookOrder> findBookOrderBySeries(@Param("series") Series series);
 
-    public Page<BookOrder> findAllByDeadlineLessThanEqual(Date deadline, Pageable pageable);
-    public Page<BookOrder> findAllBy(Date deadline, Pageable pageable);
+    public Page<BookOrder> findAllByDeadlineLessThanEqualAndOrderStatusEquals(Date deadline,
+                                                                               Pageable pageable,
+                                                                               OrderStatus orderStatus);
 
+    public boolean existsAllByReaderEqualsAndDeadlineLessThanEqualAndOrderStatusIn(Reader reader,
+                                                                                  Date deadline,
+                                                                                  List<OrderStatus> orderStatuses);
 }

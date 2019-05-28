@@ -51,7 +51,7 @@ public class BookController {
     }
 
     @PostMapping("/books/save")
-    public String addBook(@Valid Book book, BindingResult result, Model model) {
+    public String saveBook(@Valid Book book, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("authors", authorService.findAll());
             return "books/book";
@@ -70,7 +70,7 @@ public class BookController {
     }
 
     @GetMapping("books/{id}/delete")
-    public String deleteBook(@PathVariable("id") long id) {
+    public String deleteBook(@PathVariable("id") Long id) {
         bookService.deleteById(id);
         return "redirect:/books";
     }

@@ -23,6 +23,7 @@
                         <div class="text-danger" th:if="${message}" th:text="${message}"/>
 
                         <input type="hidden" th:field="*{id}">
+                        <input type="hidden" th:field="*{date}">
                         <input type="hidden" th:field="${bookOrder.bookOrderLines}">
 
                         <div th:if="${bookOrder.id != null}">
