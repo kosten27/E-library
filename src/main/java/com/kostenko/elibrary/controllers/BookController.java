@@ -53,6 +53,7 @@ public class BookController {
     @PostMapping("/books/save")
     public String addBook(@Valid Book book, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("authors", authorService.findAll());
             return "books/book";
         }
         bookService.save(book);

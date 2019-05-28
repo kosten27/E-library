@@ -2,6 +2,7 @@ package com.kostenko.elibrary.controllers;
 
 import com.kostenko.elibrary.models.Book;
 import com.kostenko.elibrary.models.Series;
+import com.kostenko.elibrary.services.BookOrderService;
 import com.kostenko.elibrary.services.BookService;
 import com.kostenko.elibrary.services.SeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class SeriesController {
     private SeriesService seriesService;
     @Autowired
     private BookService bookService;
+    @Autowired
+    private BookOrderService bookOrderService;
 
     @GetMapping("/books/{bookId}/series/add")
     public String addSeries(@PathVariable Long bookId, Series series, Model model) {
@@ -39,6 +42,7 @@ public class SeriesController {
         Series series = seriesService.findById(id);
         model.addAttribute("series", series);
         model.addAttribute("bookId", bookId);
+        model.addAttribute("orders", bookOrderService.findBookOrderBySeries(series));
         return "books/series";
     }
 }

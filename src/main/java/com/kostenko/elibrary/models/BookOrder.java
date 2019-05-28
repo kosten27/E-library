@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class BookOrder {
@@ -19,7 +20,7 @@ public class BookOrder {
     private OrderStatus orderStatus;
     @ManyToOne
     private Reader reader;
-    @OneToMany(mappedBy = "bookOrder")
+    @OneToMany(mappedBy = "bookOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BookOrderLine> bookOrderLines;
 
     public BookOrder() {
@@ -71,5 +72,15 @@ public class BookOrder {
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+
+    public void addLine(BookOrderLine bookOrderLine) {
+        bookOrderLines.add(bookOrderLine);
+    }
+
+    public List<Series> getSeries() {
+        return bookOrderLines.stream()
+                .map(BookOrderLine::getSeries)
+                .collect(Collectors.toList());
     }
 }

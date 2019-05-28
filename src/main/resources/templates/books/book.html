@@ -24,14 +24,15 @@
 
                         <label for="title" class="col-form-label">Title</label>
                         <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title">
-                        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></span>
+                        <p><span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger"></span></p>
 
-                        <label for="title" class="col-form-label">Author</label>
+                        <label for="author" class="col-form-label">Author</label>
                         <select class="form-control" th:field="${book.author}" id="author" placeholder="Author">
                             <option value="0"></option>
                             <option th:each="author : ${authors}" th:value="${author.id}"
                                     th:text="${author.name}"></option>
                         </select>
+<!--                        <p><span th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="text-danger"></span></p>-->
 
                     </div>
                 </div>

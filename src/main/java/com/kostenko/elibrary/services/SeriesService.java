@@ -1,6 +1,7 @@
 package com.kostenko.elibrary.services;
 
 import com.kostenko.elibrary.models.Book;
+import com.kostenko.elibrary.models.BookOrder;
 import com.kostenko.elibrary.models.Series;
 import com.kostenko.elibrary.repositories.SeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,10 @@ public class SeriesService {
 
     public List<Series> findAllAvailable() {
         return  seriesRepository.findAllAvailable();
+    }
+
+    public List<Series> findUnavailableSeries(BookOrder bookOrder) {
+        return seriesRepository.findUnavailable(bookOrder.getSeries(), bookOrder.getId());
     }
 
     public List<Series> findAll() {
