@@ -23,9 +23,9 @@
                 <form action="/orders" method="get">
 
                     <div class="my-3">
-                        <label class="col-form-label">Deadline</label>
-                        <input type="date" name="deadline" th:value="${#dates.format(deadline, 'dd.MM.yyyy')}" class="form-control-inline"
-                               placeholder="Deadline" forma>
+                        <label class="col-form-label">Deadline less than equals</label>
+                        <input type="date" name="deadline" th:value="${#dates.format(deadline, 'dd.MM.yyyy')}"
+                               class="form-control-inline" placeholder="Deadline" forma>
                         <button type="submit" class="btn btn-primary">Filter</button>
                     </div>
                 </form>
@@ -38,8 +38,7 @@
                         <th>Status</th>
                         <th>Deadline</th>
                         <th>Reader</th>
-                        <!--<th style="width: 5%">Edit</th>-->
-                        <!--<th style="width: 5%">Delete</th>-->
+                        <th style="width: 30%">Number of lines</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -47,15 +46,11 @@
                         <td>
                             <a th:href="@{/orders/__${order.id}__}" th:text="${order.id}"/></a>
                         </td>
-                        <!--<td th:text="${order.date}"></td>-->
                         <td th:text="${#dates.format(order.date, 'dd.MM.yyyy HH:mm')}"></td>
                         <td th:text="${order.orderStatus}"></td>
                         <td th:text="${#dates.format(order.deadline, 'dd.MM.yyyy')}"></td>
                         <td th:text="${order.reader}"></td>
-                        <!--<td style="text-align: center"><a th:href="@{'/books/update/{id}'(id=${book.id})}"><i-->
-                        <!--class="fa fa-edit" style="font-size:20px"></i></a></td>-->
-                        <!--<td style="text-align: center"><a th:href="@{'/books/delete/{id}'(id=${book.id})}"><i-->
-                        <!--class="fa fa-trash" style="font-size:20px"></i></a></td>-->
+                        <td style="text-align: center" th:text="${order.getNumberOfLines()}"></td>
                     </tr>
                     </tbody>
                 </table>

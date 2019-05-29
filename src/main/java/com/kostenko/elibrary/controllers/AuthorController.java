@@ -1,36 +1,34 @@
 package com.kostenko.elibrary.controllers;
 
 import com.kostenko.elibrary.models.Author;
-import com.kostenko.elibrary.models.Book;
 import com.kostenko.elibrary.services.AuthorService;
-import com.kostenko.elibrary.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 public class AuthorController {
 
-    @Autowired
     private AuthorService authorService;
-    @Autowired
-    private BookService bookService;
+
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
+    }
 
     @GetMapping("/authors")
     public String getAuthors(Model model,
-                             @RequestParam("page") Optional<Integer> page,
-                             @RequestParam("size") Optional<Integer> size) {
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(5);
+                             @RequestParam(name = "page", defaultValue = "1") int page,
+                             @RequestParam(name = "size", defaultValue = "5") int size) {
 
-        Page<Author> authors = authorService.findPagination(PageRequest.of(currentPage - 1, pageSize));
+        Page<Author> authors = authorService.findPagination(PageRequest.of(page - 1, size));
         model.addAttribute("authors", authors);
         return "authors/list";
     }

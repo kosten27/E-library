@@ -6,7 +6,6 @@ import com.kostenko.elibrary.models.BookOrderLine;
 import com.kostenko.elibrary.models.OrderStatus;
 import com.kostenko.elibrary.models.Series;
 import com.kostenko.elibrary.services.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,38 +20,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class BookOrderController {
 
-    @Autowired
     private BookOrderService bookOrderService;
-    @Autowired
     private ReaderService readerService;
-    @Autowired
     private BookService bookService;
-    @Autowired
     private SeriesService seriesService;
-    @Autowired
     private BookOrderLineService bookOrderLineService;
+
+    public BookOrderController(BookOrderService bookOrderService, ReaderService readerService, BookService bookService,
+                               SeriesService seriesService, BookOrderLineService bookOrderLineService) {
+        this.bookOrderService = bookOrderService;
+        this.readerService = readerService;
+        this.bookService = bookService;
+        this.seriesService = seriesService;
+        this.bookOrderLineService = bookOrderLineService;
+    }
 
     @GetMapping("/orders")
     public String getBooks(Model model,
-                           @RequestParam("page") Optional<Integer> page,
-                           @RequestParam("size") Optional<Integer> size,
+                           @RequestParam(name = "page", defaultValue = "1") int page,
+                           @RequestParam(name = "size", defaultValue = "5") int size,
                            @RequestParam(name = "deadline", required = false)
                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date deadline) {
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(5);
-//        Date deadline = null;
-//        if (filterDeadline != null) {
-//            try {
-//                deadline = new SimpleDateFormat("yyyy-MM-dd").parse(filterDeadline);
-//            } catch (ParseException e) {
-//            }
-//        }
-        PageRequest pageable = PageRequest.of(currentPage - 1, pageSize);
+        PageRequest pageable = PageRequest.of(page - 1, size);
         Page<BookOrder> orders = null;
         if (deadline != null) {
             orders = bookOrderService.findAllByDeadlineLessThanEqualAndOrderStatusEquals(deadline,
@@ -60,7 +53,6 @@ public class BookOrderController {
         } else {
             orders = bookOrderService.findPagination(pageable);
         }
-        model.addAttribute("deadline", deadline);
         model.addAttribute("orders", orders);
         return "orders/list";
     }
@@ -94,25 +86,6 @@ public class BookOrderController {
         model.addAttribute("readers", readerService.findAll());
         return "orders/order";
     }
-
-//    @GetMapping("/orders/{id}/edit")
-//    public String showUpdateAuthor(@PathVariable("id") Long id, Model model) {
-//        BookOrder bookOrder = bookOrderService.findById(id);
-//        model.addAttribute("bookOrder", bookOrder);
-//        model.addAttribute("readers", readerService.findAll());
-//        return "orders/update";
-//    }
-
-//    @PostMapping("/orders/{id}/edit")
-//    public String updateAuthor(@PathVariable("id") Long id, @Valid BookOrder bookOrder, BindingResult result, Model model) {
-//        if (result.hasErrors()) {
-//            model.addAttribute("bookOrder", bookOrder);
-//            model.addAttribute("readers", readerService.findAll());
-//            return "orders/update";
-//        }
-//        bookOrderService.save(bookOrder);
-//        return "redirect:/orders/" + bookOrder.getId();
-//    }
 
     @GetMapping("/orders/{orderId}/lines/add")
     public String addLine(@PathVariable("orderId") Long orderId, BookOrderLine bookOrderLine, Model model) {

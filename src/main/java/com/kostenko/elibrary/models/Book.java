@@ -2,18 +2,17 @@ package com.kostenko.elibrary.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity(name = "BOOK")
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotBlank(message = "Title is mandatory")
     private String title;
     @ManyToOne
-//    @NotNull(message = "Author is mandatory")
     private Author author;
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Series> series;
@@ -51,6 +50,10 @@ public class Book {
 
     public void setSeries(List<Series> series) {
         this.series = series;
+    }
+
+    public int getNumberOfSeries() {
+        return series.size();
     }
 
     @Override

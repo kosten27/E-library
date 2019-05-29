@@ -1,9 +1,7 @@
 package com.kostenko.elibrary.controllers;
 
-import com.kostenko.elibrary.models.Book;
 import com.kostenko.elibrary.models.Reader;
 import com.kostenko.elibrary.services.ReaderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -15,23 +13,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 public class ReaderController {
 
-    @Autowired
     private ReaderService readerService;
 
+    public ReaderController(ReaderService readerService) {
+        this.readerService = readerService;
+    }
 
     @GetMapping("/readers")
     public String getBooks(Model model,
-                           @RequestParam("page") Optional<Integer> page,
-                           @RequestParam("size") Optional<Integer> size) {
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(5);
+                           @RequestParam(name = "page", defaultValue = "1") int page,
+                           @RequestParam(name = "size", defaultValue = "5") int size) {
 
-        Page<Reader> readers = readerService.findPagination(PageRequest.of(currentPage - 1, pageSize));
+        Page<Reader> readers = readerService.findPagination(PageRequest.of(page - 1, size));
         model.addAttribute("readers", readers);
         return "readers/list";
     }
@@ -52,7 +49,7 @@ public class ReaderController {
     }
 
     @GetMapping("/readers/{id}")
-    public String showUpdateReader(@PathVariable("id") long id, Model model) {
+    public String showUpdateReader(@PathVariable("id") Long id, Model model) {
         model.addAttribute("reader", readerService.findById(id));
         return "readers/reader";
     }

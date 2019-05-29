@@ -3,7 +3,6 @@ package com.kostenko.elibrary.controllers;
 import com.kostenko.elibrary.models.Book;
 import com.kostenko.elibrary.services.AuthorService;
 import com.kostenko.elibrary.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -15,30 +14,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.*;
 
 @Controller
 public class BookController {
 
-    @Autowired
     private BookService bookService;
-    @Autowired
     private AuthorService authorService;
+
+    public BookController(BookService bookService, AuthorService authorService) {
+        this.bookService = bookService;
+        this.authorService = authorService;
+    }
 
     @GetMapping("/books")
     public String getBooks(Model model,
-                           @RequestParam("page") Optional<Integer> page,
-                           @RequestParam("size") Optional<Integer> size,
-                           @RequestParam("search") Optional<String> search) {
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(5);
-        String stringSearch = search.orElse("");
+                           @RequestParam(name = "page", defaultValue = "1") int page,
+                           @RequestParam(name = "size", defaultValue = "5") int size,
+                           @RequestParam(name = "search", defaultValue = "") String search) {
         Page<Book> books;
-        PageRequest pageable = PageRequest.of(currentPage - 1, pageSize);
-        if (stringSearch.equals("")) {
+        PageRequest pageable = PageRequest.of(page - 1, size);
+        if (search.equals("")) {
             books = bookService.findAll(pageable);
         } else {
-            books = bookService.findByTitleIsContaining(stringSearch, pageable);
+            books = bookService.findByTitleIsContaining(search, pageable);
         }
         model.addAttribute("books", books);
         return "books/list";
@@ -65,7 +63,6 @@ public class BookController {
         Book book = bookService.findById(id);
         model.addAttribute("book", book);
         model.addAttribute("authors", authorService.findAll());
-//        model.addAttribute("series", book.getSeries());
         return "books/book";
     }
 

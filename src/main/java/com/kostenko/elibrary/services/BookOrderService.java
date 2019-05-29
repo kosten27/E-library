@@ -17,13 +17,10 @@ import java.util.List;
 public class BookOrderService {
 
     private BookOrderRepository bookOrderRepository;
-    private SeriesService seriesService;
     private BookOrderValidator bookOrderValidator;
 
-    public BookOrderService(BookOrderRepository bookOrderRepository, SeriesService seriesService,
-                            BookOrderValidator bookOrderValidator) {
+    public BookOrderService(BookOrderRepository bookOrderRepository, BookOrderValidator bookOrderValidator) {
         this.bookOrderRepository = bookOrderRepository;
-        this.seriesService = seriesService;
         this.bookOrderValidator = bookOrderValidator;
     }
 

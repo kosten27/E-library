@@ -78,6 +78,10 @@ public class BookOrder {
         bookOrderLines.add(bookOrderLine);
     }
 
+    public int getNumberOfLines() {
+        return bookOrderLines.size();
+    }
+
     public List<Series> getSeries() {
         return bookOrderLines.stream()
                 .map(BookOrderLine::getSeries)

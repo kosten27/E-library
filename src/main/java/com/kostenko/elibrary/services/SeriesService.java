@@ -1,10 +1,8 @@
 package com.kostenko.elibrary.services;
 
-import com.kostenko.elibrary.models.Book;
 import com.kostenko.elibrary.models.BookOrder;
 import com.kostenko.elibrary.models.Series;
 import com.kostenko.elibrary.repositories.SeriesRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +10,11 @@ import java.util.List;
 @Service
 public class SeriesService {
 
-    @Autowired
     private SeriesRepository seriesRepository;
+
+    public SeriesService(SeriesRepository seriesRepository) {
+        this.seriesRepository = seriesRepository;
+    }
 
     public Series save(Series series) {
         return seriesRepository.save(series);
