@@ -3,15 +3,14 @@ package com.kostenko.elibrary.models;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-public class BookOrder {
-    @Id
-    @GeneratedValue
-    private Long id;
+public class BookOrder  extends BaseEntity {
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date date;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -19,19 +18,12 @@ public class BookOrder {
     @Enumerated(EnumType.ORDINAL)
     private OrderStatus orderStatus;
     @ManyToOne
+    @NotNull
     private Reader reader;
     @OneToMany(mappedBy = "bookOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BookOrderLine> bookOrderLines;
 
     public BookOrder() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Date getDate() {

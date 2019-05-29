@@ -5,11 +5,8 @@ import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
-public class Author {
+public class Author extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     @NotBlank(message = "Name is mandatory")
     private String name;
     @OneToMany(mappedBy = "author")

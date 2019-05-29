@@ -5,21 +5,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Reader {
-    @Id
-    @GeneratedValue
-    private long id;
+public class Reader  extends BaseEntity {
+
     private String name;
 
     public Reader() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
